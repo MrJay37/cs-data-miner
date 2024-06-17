@@ -1,0 +1,14 @@
+venv/
+
+.idea/
+
+# Ignore python files in root directory, except lambda_function.py
+/*.py
+!lambda_function.py
+
+# Non .py Test files
+.access_token.json
+test.json
+static/
+
+**/__pycache__
