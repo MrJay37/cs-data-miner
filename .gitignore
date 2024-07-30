@@ -12,3 +12,6 @@ test.json
 static/
 
 **/__pycache__
+
+# Secret file
+.env

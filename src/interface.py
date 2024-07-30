@@ -1,10 +1,14 @@
 import base64
 from datetime import datetime as dt, timedelta as td
 from boto3 import session
+from dotenv import load_dotenv
 import json
 import logging
 import os
 import requests
+
+
+load_dotenv()
 
 
 class ErrorCall(Exception):
@@ -38,7 +42,13 @@ class CharlesSchwabAPIInterface:
         self._token_handler = token_handler
 
     def _getAuthURL(self):
-        return f'https://api.schwabapi.com/v1/oauth/authorize?client_id={self._api_key}&redirect_uri=https://127.0.0.1'
+        return (
+            f'https://api.schwabapi.com/v1/oauth/authorize?'
+            f'client_id={self._api_key}&'
+            f'redirect_uri=https://127.0.0.1&'
+            f'response_type=code&'
+            f'scope=readonly'
+        )
 
     def _getAuthHeaders(self):
         return {
@@ -49,6 +59,7 @@ class CharlesSchwabAPIInterface:
         }
 
     def _authenticate(self):
+        print(self._getAuthURL())
         response_url = input('Go to the link, login and then enter response URL here bro\n')
 
         code = f"{response_url[response_url.index('code=')+5:response_url.index('%40')]}@"

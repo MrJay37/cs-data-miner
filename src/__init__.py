@@ -1,4 +1,3 @@
-from boto3 import client
 from boto3.session import Session
 from datetime import time as t
 from pytz import timezone, UTC
@@ -8,7 +7,6 @@ from src.interface import *
 DOWNLOAD_DIR = '/tmp' if os.getenv('DOWNLOAD_DIR') is None else os.getenv('DOWNLOAD_DIR')
 
 MARKET_TZ = 'America/New_York'
-AWS_PROFILE = 'default' if os.getenv('AWS_PROFILE') is None else os.getenv('AWS_PROFILE')
 
 
 def getEventRule(c):
@@ -29,7 +27,7 @@ def getEventRule(c):
 
 
 def disableRule():
-    s = Session(profile_name=AWS_PROFILE)
+    s = Session(profile_name=AWS_PROFILE_NAME)
 
     c = s.client('events')
 
@@ -47,7 +45,7 @@ def weeklyTokenRefresh():
 
     cs.weeklyRefresh()
 
-    s = Session(profile_name=AWS_PROFILE)
+    s = Session(profile_name=AWS_PROFILE_NAME)
 
     c = s.client('events')
 
@@ -58,6 +56,8 @@ def weeklyTokenRefresh():
         c.enable_rule(Name=rule['Name'])
 
     logging.info(f"Charles Schwab data mining trigger rule enabled")
+
+    workflow(False, False)
 
 
 def reorganizeDataFiles():
